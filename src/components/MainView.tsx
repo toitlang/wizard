@@ -33,9 +33,6 @@ const styles = (theme: Theme) =>
       }),
       marginLeft: 0,
     },
-    button: {
-      color: theme.palette.common.black,
-    },
     list: {
       overflowX: "hidden",
       overflow: "auto",

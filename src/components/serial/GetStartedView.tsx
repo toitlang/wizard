@@ -7,9 +7,6 @@ const styles = (theme: Theme) =>
       maxWidth: 450,
       textAlign: "center",
     },
-    button: {
-      marginTop: theme.spacing(2),
-    },
     children: { marginTop: theme.spacing(1.5) },
     heading: {
       fontSize: "2rem",

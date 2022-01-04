@@ -14,7 +14,6 @@ import SetupView from "../../components/wizard/SetupView";
 import { RootState } from "../../store";
 
 const mapStateToProps = (state: RootState) => {
-  const serial = state.serial;
   return {
     detectState: state.serial.detectState,
   };

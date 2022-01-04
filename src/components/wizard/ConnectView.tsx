@@ -148,9 +148,9 @@ class ConnectView extends React.Component<ConnectProps, ConnectState> {
       this.props.updateCurrentAction(WizardAction.SETUP);
     } catch (e) {
       console.log("Failed to connect, ", e);
-      if (e instanceof DOMException && e.code == DOMException.NOT_FOUND_ERR) {
+      if (e instanceof DOMException && e.code === DOMException.NOT_FOUND_ERR) {
         this.setState({ error: ConnectError.NOT_FOUND_ERR, noFilter: true });
-      } else if (e instanceof DOMException && e.code == DOMException.NETWORK_ERR) {
+      } else if (e instanceof DOMException && e.code === DOMException.NETWORK_ERR) {
         this.setState({ error: ConnectError.NETWORK_ERR });
       } else {
         this.setState({ error: ConnectError.UNKNOWN_ERR });

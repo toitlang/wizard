@@ -5,19 +5,6 @@ import ScrollableContainer from "../general/ScrollableContainer";
 
 const styles = (theme: Theme) =>
   createStyles({
-    contentContainer: {
-      maxWidth: 440,
-    },
-    textContent: {
-      paddingTop: theme.spacing(5),
-    },
-    landingText: {
-      display: "inline-block",
-    },
-    boldText: {
-      fontWeight: 500,
-      display: "inline-block",
-    },
     bottomGrid: {
       height: 68,
       position: "fixed",
@@ -44,9 +31,6 @@ const styles = (theme: Theme) =>
     containerWrapper: {
       alignContent: "space-between",
       paddingBottom: theme.spacing(10),
-    },
-    link: {
-      cursor: "pointer",
     },
     button: {
       minWidth: 100,

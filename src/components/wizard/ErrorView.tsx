@@ -9,10 +9,6 @@ const styles = (theme: Theme) =>
       maxWidth: 440,
       width: 440,
     },
-    errorGridSuggestion: {
-      paddingTop: theme.spacing(0.75),
-      paddingbottom: theme.spacing(0.75),
-    },
     suggestionBox: {
       borderStyle: "solid",
       borderColor: black,
@@ -49,18 +45,6 @@ const styles = (theme: Theme) =>
       fontSize: "2rem",
       fontFamily: "Clash Display",
       fontWeight: 500,
-    },
-    textContent: {
-      paddingTop: theme.spacing(5),
-    },
-    scrollableWrapper: {
-      height: "calc(100% - 8px)",
-      width: "100%",
-    },
-    containerWrapper: {
-      alignContent: "space-between",
-      paddingBottom: theme.spacing(10),
-      textAlign: "center",
     },
   });
 

@@ -61,10 +61,6 @@ const styles = (theme: Theme) =>
     arrow: {
       marginBottom: 16,
     },
-    boldText: {
-      fontWeight: 500,
-      display: "inline-block",
-    },
   });
 
 interface WizardProps extends WithStyles<typeof styles> {

@@ -1,10 +1,6 @@
-import { connectableObservableDescriptor } from "rxjs/internal/observable/ConnectableObservable";
-
 export async function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-type voidFunc = (value: void) => void;
 
 export class Uint8Buffer {
   private readOffset = 0;
@@ -66,7 +62,7 @@ export class Uint8Buffer {
   pack(format: string, ...args: number[]): void {
     let pointer = 0;
     const data = args;
-    if (format.replace(/[<>]/, "").length != data.length) {
+    if (format.replace(/[<>]/, "").length !== data.length) {
       throw "Pack format to Argument count mismatch";
     }
     let littleEndian = true;
