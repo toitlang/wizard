@@ -42,11 +42,13 @@ const styles = (theme: Theme) =>
       paddingTop: theme.spacing(2),
       fontSize: "2rem",
       color: passion,
-      fontFamily: "ClashDisplay-Medium",
+      fontFamily: "Clash Display",
+      fontWeight: 500,
     },
     heading: {
       fontSize: "2rem",
-      fontFamily: "ClashDisplay-Medium",
+      fontFamily: "Clash Display",
+      fontWeight: 500,
     },
     textContent: {
       paddingTop: theme.spacing(5),

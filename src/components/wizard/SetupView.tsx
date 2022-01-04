@@ -69,7 +69,8 @@ const styles = (theme: Theme) =>
     },
     heading: {
       fontSize: "2rem",
-      fontFamily: "ClashDisplay-Medium",
+      fontFamily: "Clash Display",
+      fontWeight: 500,
     },
     form: {
       width: "100%",
@@ -100,7 +101,6 @@ interface SetupState {
   compatibleModelsForSelectedFirmware: string[];
   firmwareName: string;
   firmwareModel: string;
-  autoClaim: boolean;
   model: string;
   showPassword: boolean;
   remember: boolean;
@@ -116,7 +116,6 @@ class SetupView extends React.Component<SetupProps, SetupState> {
     ssid: reactLocalStorage.get(toitWifiSSID, "").toString() || "",
     password: reactLocalStorage.get(toitWifiPassword, "").toString() || "",
     firmwareModel: "esp32-4mb",
-    autoClaim: true,
     showPassword: false,
     remember: reactLocalStorage.get("toit_remember", false),
   };
@@ -133,9 +132,8 @@ class SetupView extends React.Component<SetupProps, SetupState> {
     this.props.updateFlashingProperties({
       ssid: flashingProperties.ssid,
       password: flashingProperties.password,
-      firmware: flashingProperties.firmware,
+      firmware_version: flashingProperties.firmware_version,
       model: flashingProperties.model,
-      autoClaim: flashingProperties.autoClaim,
     });
     if (this.state.remember) {
       reactLocalStorage.set(toitWifiSSID, this.state.ssid);
@@ -234,8 +232,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                       this.beginFlash({
                         ssid: state.ssid,
                         password: state.password,
-                        firmware: state.firmwareName,
-                        autoClaim: state.autoClaim,
+                        firmware_version: state.firmwareName,
                         model: state.firmwareModel,
                       })
                     }

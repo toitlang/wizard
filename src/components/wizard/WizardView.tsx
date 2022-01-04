@@ -8,7 +8,6 @@ import Connect from "../../containers/wizard/Connect";
 import Flash from "../../containers/wizard/Flash";
 import Setup from "../../containers/wizard/Setup";
 import * as Serial from "../../misc/serial";
-import { ConsoleStatus, WifiStatus } from "../../misc/serial/toitserial";
 import { initialWizardState } from "../../reducers/wizard";
 import HeaderBodyView, { Body, Header } from "../general/HeaderBodyView";
 import { closePort } from "../general/util";
@@ -96,22 +95,6 @@ class WizardView extends React.Component<WizardProps> {
     super(props);
   }
 
-  getClaimErrorDescription(wifiStatus: WifiStatus, consoleStatus: ConsoleStatus): string | undefined {
-    switch (wifiStatus) {
-      case WifiStatus.AccessPointNotFound:
-        return "Your ESP32 did not find the WiFi Network: '" + this.props.flashingProperties?.ssid + "'.";
-      case WifiStatus.BadAuthentication:
-        return "Your ESP32 could not connect to the WiFi network because the given WiFi password was wrong.";
-      case WifiStatus.Connected:
-        switch (consoleStatus) {
-          case ConsoleStatus.NotConnected:
-            return "Your ESP32 could not connect to the Toit Cloud.";
-          case ConsoleStatus.Connected:
-            return "Your ESP32 device successfully connected to the Toit Cloud but we was unable to claim it. ";
-        }
-    }
-  }
-
   viewRenderer(action?: WizardAction | WizardError): JSX.Element | undefined {
     switch (action) {
       case WizardAction.CONNECT:
@@ -142,35 +125,6 @@ class WizardView extends React.Component<WizardProps> {
                 title="Internal error"
               />
             );
-          case WizardErrorType.CLAIM_ERR:
-            if (action.metadata) {
-              const md = action.metadata as {
-                wifiStatus: WifiStatus;
-                consoleStatus: ConsoleStatus;
-                hardwareID: string;
-              };
-              if (md.wifiStatus === WifiStatus.Connected && md.consoleStatus === ConsoleStatus.Connected) {
-                return (
-                  <ErrorButtonView
-                    buttonText="Retry claiming"
-                    buttonTo={"/claim/" + md.hardwareID}
-                    description={
-                      "Your ESP32 connected successfully, but could not be claimed. The device may have been claimed to a different project if not, try claim again."
-                    }
-                    title={action.type}
-                  />
-                );
-              }
-              return (
-                <ErrorButtonView
-                  buttonFunction={() => this.props.updateCurrentAction(WizardAction.SETUP)}
-                  buttonText="Reinstall"
-                  description={this.getClaimErrorDescription(md.wifiStatus, md.consoleStatus)}
-                  title={action.type}
-                />
-              );
-            }
-            return;
           case WizardErrorType.SERIAL_NOT_SUPPORT:
             return (
               <ErrorButtonView

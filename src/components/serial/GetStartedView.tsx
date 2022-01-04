@@ -13,7 +13,8 @@ const styles = (theme: Theme) =>
     children: { marginTop: theme.spacing(1.5) },
     heading: {
       fontSize: "2rem",
-      fontFamily: "ClashDisplay-medium",
+      fontFamily: "Clash Display",
+      fontWeight: 500,
     },
   });
 

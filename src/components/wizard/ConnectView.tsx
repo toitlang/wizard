@@ -185,7 +185,7 @@ class ConnectView extends React.Component<ConnectProps, ConnectState> {
   }
 
   async onDetect() {
-    if (!this.props.currentPort || (this.props.detectState && this.props.detectState.hardwareIdentity)) {
+    if (!this.props.currentPort || this.props.detectState) {
       return;
     }
     await this.process(true, this.detectHandler.bind(this));

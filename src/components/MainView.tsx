@@ -3,118 +3,14 @@ import clsx from "clsx";
 import { UnregisterCallback } from "history";
 import React from "react";
 import { Route, RouteComponentProps, Switch, withRouter } from "react-router-dom";
-import { dividerGrey, selected, white } from "../assets/theme/theme";
 import Wizard from "../containers/wizard/Wizard";
 
-export const drawerWidth = 200;
-export const drawerWidthCollapsed = 68;
-const drawerWidthMobile = "100%";
 const gridSpacing = 8;
-const appBarHeight = 64;
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       display: "flex",
-    },
-    appBar: {
-      height: appBarHeight,
-      color: theme.palette.primary.main,
-      // transition: theme.transitions.create(["margin", "width"], {
-      //   easing: theme.transitions.easing.sharp,
-      //   duration: theme.transitions.duration.leavingScreen,
-      // }),
-      zIndex: 0,
-      backgroundColor: white,
-      borderBottomWidth: "1px",
-      borderBottomColor: dividerGrey,
-      borderBottomStyle: "solid",
-    },
-    appBarShift: {
-      height: appBarHeight,
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      // transition: theme.transitions.create(["margin", "width"], {
-      //   easing: theme.transitions.easing.easeOut,
-      //   duration: theme.transitions.duration.enteringScreen,
-      // }),
-    },
-    drawerHeader: {
-      display: "flex",
-      alignItems: "center",
-      ...theme.mixins.toolbar,
-      height: appBarHeight,
-    },
-    drawer: {
-      width: drawerWidth,
-      flexShrink: 0,
-      whiteSpace: "nowrap",
-      [theme.breakpoints.only("xs")]: {
-        width: drawerWidthMobile,
-        position: "absolute",
-      },
-    },
-    drawerOpen: {
-      width: drawerWidth,
-      [theme.breakpoints.only("xs")]: {
-        width: drawerWidthMobile,
-      },
-      // transition: theme.transitions.create("width", {
-      //   easing: theme.transitions.easing.sharp,
-      //   duration: theme.transitions.duration.enteringScreen,
-      // }),
-    },
-    drawerClose: {
-      // transition: theme.transitions.create("width", {
-      //   easing: theme.transitions.easing.sharp,
-      //   duration: theme.transitions.duration.leavingScreen,
-      // }),
-      width: 0,
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(6),
-      },
-    },
-    drawerPaper: {
-      borderRight: 0,
-      overflow: "hidden",
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.light,
-    },
-    logo: {
-      marginLeft: "13px",
-      height: "1rem",
-    },
-    menuButton: {
-      position: "absolute",
-      right: theme.spacing(1.5),
-      padding: 0,
-    },
-    menuExpandButton: {
-      padding: 0,
-      marginRight: theme.spacing(1.25),
-    },
-    appbarHeader: {
-      marginLeft: drawerWidth + theme.spacing(1),
-      display: "flex",
-      alignItems: "center",
-    },
-    appbarHeaderAndIcon: {
-      marginLeft: theme.spacing(1),
-      display: "flex",
-      alignItems: "center",
-      [theme.breakpoints.up("sm")]: {
-        marginLeft: drawerWidthCollapsed + theme.spacing(2) - 12,
-      },
-    },
-    hide: {
-      display: "none",
-    },
-    toolbar: {
-      height: appBarHeight,
-    },
-    appBarContent: {
-      paddingLeft: theme.spacing(1.5),
-      paddingRight: theme.spacing(1.5),
     },
     content: {
       flexGrow: 1,
@@ -137,61 +33,15 @@ const styles = (theme: Theme) =>
       }),
       marginLeft: 0,
     },
-    title: {
-      flexGrow: 1,
-    },
-    typography: {
-      padding: theme.spacing(3),
-    },
     button: {
       color: theme.palette.common.black,
-    },
-    appBarRight: {
-      display: "flex",
-      alignItems: "center",
-      marginLeft: "auto",
-    },
-    exitButton: {
-      color: theme.palette.common.black,
-      "&:hover": {
-        backgroundColor: "transparent",
-      },
     },
     list: {
       overflowX: "hidden",
       overflow: "auto",
     },
-    listItem: {
-      "&:hover, &.Mui-selected, &.Mui-selected:hover": {
-        backgroundColor: selected,
-      },
-    },
     icon: {
       color: "black",
-    },
-    orgNameAndHelp: {
-      display: "flex",
-      alignItems: "center",
-    },
-    buttonDevEnv: {
-      width: 110,
-      fontWeight: 300,
-    },
-    bottomContent: {
-      height: "100%",
-      alignContent: "center",
-      marginBottom: theme.spacing(2),
-    },
-    freeContainer: {
-      paddingBottom: theme.spacing(2),
-      width: 168,
-    },
-    progressionContainer: {
-      paddingBottom: theme.spacing(3),
-      width: 168,
-    },
-    columnContainer: {
-      width: "100%",
     },
   });
 
@@ -229,11 +79,6 @@ class MainView extends React.Component<MainProps, MenuState> {
 
   state = {
     menuShown: true,
-  };
-
-  toggleMenu = (b: boolean) => () => {
-    this.setState({ menuShown: b });
-    sessionStorage.setItem("menuWidth", b === true ? drawerWidth.toString() : "0");
   };
 
   static pages: PageComponent[] = [

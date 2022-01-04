@@ -7,7 +7,6 @@ import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
 import { black, pythonShade, white } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
-import { HardwareIdentity } from "../../misc/serial/toitserial";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
 
@@ -62,14 +61,17 @@ const styles = (theme: Theme) =>
     },
     heading: {
       fontSize: "2rem",
-      fontFamily: "ClashDisplay-Medium",
+      fontFamily: "Clash Display",
+      fontWeight: 500,
     },
     descriptionText: {
       fontSize: 16,
     },
     percentage: {
+      //BOLD
       fontSize: "2rem",
-      fontFamily: "ClashDisplay-Bold",
+      fontFamily: "Clash Display",
+      fontWeight: 700,
     },
     progressbar: {
       width: 260,
@@ -323,70 +325,8 @@ class FlashView extends React.Component<FlashProps, FlashState> {
     logger.reset();
 
     const detectState = this.props.detectState;
-    let identity: HardwareIdentity | undefined;
     let partitions: Serial.Partition[];
-    // try {
-    //   partitions = await context.getServiceClient().getHardwarePartitions(
-    //     properties.firmware,
-    //     properties.model,
-    //     action === InstallType.PROVISION ? PartitionMode.INITIAL : PartitionMode.SYSTEM,
-    //     new Map([
-    //       ["wifi.ssid", properties.ssid],
-    //       ["wifi.password", properties.password],
-    //     ]),
-    //     identity
-    //   );
-    // } catch (e) {
-    //   if (identity) {
-    //     localStorage.setItem("device.hwid", identity.encode());
-    //   }
-    //   this.props.updateCurrentAction({
-    //     error: e,
-    //     type: WizardErrorType.CREATE_PARTITION_ERR,
-    //   });
-    //   return false;
-    // }
-
-    // try {
-    //   this.props.updateDetectState(undefined);
-    //   await Serial.flash(
-    //     port,
-    //     partitions.map<Serial.Partition>((p) => {
-    //       return {
-    //         name: p.getName(),
-    //         data: p.getData(),
-    //         offset: p.getOffset(),
-    //       };
-    //     }),
-    //     {
-    //       progressCallback: (flashInput: Serial.FlashInput) =>
-    //         this.setState({ flashState: flashInput.state, flashDetails: flashInput.details }),
-    //       logger: logger,
-    //       erase: true,
-    //     }
-    //   );
-    // } catch (e) {
-    //   logger.error("failed to flash firmware", e);
-    //   logger.log("Try again. If you are using a dev-board, try holding down the boot button while flashing");
-    //   this.props.updateCurrentAction({
-    //     error: e,
-    //     type: WizardErrorType.FLASH_ERR,
-    //   });
-    //   return false;
-    // }
-
-    // if (identity) {
-    //   this.props.updateDetectState({
-    //     hardwareIdentity: {
-    //       hardwareID: identity.getHardwareId(),
-    //       model: properties.model,
-    //       name: "",
-    //     },
-    //     hardwareValid: true,
-    //   });
-    // } else {
-    //   this.props.updateDetectState(detectState);
-    // }
+    // TODO: Fetch partitions.
 
     this.props.updateCurrentAction(WizardAction.DONE);
     return true;

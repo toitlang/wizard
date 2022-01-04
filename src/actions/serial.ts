@@ -1,5 +1,3 @@
-import { HardwareIdentity } from "../misc/serial/toitserial";
-
 export const UPDATE_CURRENT_PORT = "UPDATE_CURRENT_PORT";
 export const UPDATE_DETECT_STATE = "UPDATE_DETECT_STATE";
 export const UPDATE_CURRENT_PORT_OPEN = "UPDATE_CURRENT_PORT_OPEN";
@@ -15,7 +13,6 @@ export const updateCurrentPort = (port?: SerialPort): UpdateCurrentPort => ({
 });
 
 export interface DetectState {
-  hardwareIdentity?: HardwareIdentity | null;
   hardwareValid?: boolean;
   deviceID?: string;
 }

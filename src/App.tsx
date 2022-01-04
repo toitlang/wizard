@@ -4,9 +4,6 @@ import "./App.css";
 import theme from "./assets/theme/theme";
 import MainView from "./components/MainView";
 
-// const serviceClient: ServiceClient = new ProtoServiceClient(API_URL);
-// export const context = new ServiceContext(serviceClient);
-
 function App(): JSX.Element {
   return (
     <MuiThemeProvider theme={theme}>

@@ -2,7 +2,6 @@ import {
   FlashingProperties,
   UPDATE_CURRENT_ACTION,
   UPDATE_FLASHING_PROPERTIES,
-  UPDATE_SHOW_QUESTIONNAIRE,
   WizardAction,
   WizardError,
   WizardReduxAction,
@@ -11,12 +10,10 @@ import {
 export type WizardState = {
   readonly currentAction: WizardAction | WizardError;
   readonly flashingProperties?: FlashingProperties;
-  readonly showQuestionnaire: boolean;
 };
 
 export const initialWizardState: WizardState = {
   currentAction: WizardAction.CONNECT,
-  showQuestionnaire: false,
 };
 
 export default function (state: WizardState = initialWizardState, action: WizardReduxAction): WizardState {
@@ -30,11 +27,6 @@ export default function (state: WizardState = initialWizardState, action: Wizard
       return {
         ...state,
         currentAction: action.payload.currentAction,
-      };
-    case UPDATE_SHOW_QUESTIONNAIRE:
-      return {
-        ...state,
-        showQuestionnaire: action.payload.showQuestionnaire,
       };
     default:
       return state;

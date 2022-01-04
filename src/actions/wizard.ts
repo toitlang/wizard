@@ -1,7 +1,6 @@
 export const UPDATE_CURRENT_ACTION = "UPDATE_CURRENT_ACTION";
 export const UPDATE_FLASHING_PROPERTIES = "UPDATE_FLASHING_PROPERTIES";
 export const UPDATE_INSTALL_TYPE = "UPDATE_INSTALL_TYPE";
-export const UPDATE_SHOW_QUESTIONNAIRE = "UPDATE_SHOW_QUESTIONNAIRE";
 
 export enum WizardAction {
   CONNECT = 1,
@@ -13,8 +12,7 @@ export enum WizardAction {
 export interface FlashingProperties {
   ssid: string;
   password: string;
-  firmware: string;
-  autoClaim: boolean;
+  firmware_version: string;
   model: string;
 }
 
@@ -24,8 +22,6 @@ export enum WizardErrorType {
   CREATE_PARTITION_ERR = "Create partition error",
   //Flash and reinstall
   FLASH_ERR = "Failed to flash",
-  //Claim
-  CLAIM_ERR = "Failed to claim",
   SERIAL_NOT_SUPPORT = "Serial not supported",
 }
 
@@ -55,14 +51,4 @@ export const updateFlashingProperties = (flashingProperties: FlashingProperties)
   payload: { flashingProperties: flashingProperties },
 });
 
-export type UpdateShowQuestionnaire = {
-  type: typeof UPDATE_SHOW_QUESTIONNAIRE;
-  payload: { showQuestionnaire: boolean };
-};
-
-export const updateShowQuestionnaire = (showQuestionnaire: boolean): UpdateShowQuestionnaire => ({
-  type: UPDATE_SHOW_QUESTIONNAIRE,
-  payload: { showQuestionnaire: showQuestionnaire },
-});
-
-export type WizardReduxAction = UpdateCurrentAction | UpdateFlashingProperties | UpdateShowQuestionnaire;
+export type WizardReduxAction = UpdateCurrentAction | UpdateFlashingProperties;
