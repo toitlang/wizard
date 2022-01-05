@@ -1,4 +1,8 @@
-# Setup for development
+# [wizard.toitlang.org](https://wizard.toitlang.org)
+
+This is the wizard for setting up your ESP32 with Jaguar which uses the open source programming language **Toit**. The wizard uses the [Toit esptool](https://www.npmjs.com/package/@toit/esptool.js).
+
+It is built with [React TypeScript](https://www.typescriptlang.org/docs/handbook/react.html).
 
 ## yarn
 
@@ -13,7 +17,7 @@ The version of `node` must be >= v12.16.1, i.e. the version of node that comes w
 ## Linting and imports in VS Code
 
 - Add the ESLint extension to VS Code to get linting directly in the code. https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint.
-- To get the right indentation, etc. directly in the code, and on save add the Prettier extension to VS Code. https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode. 
+- To get the right indentation, etc. directly in the code, and on save add the Prettier extension to VS Code. https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode.
 - To get VS Code to automatically fix linting errors (if possible) and organize imports on save, add the following to your settings.json file:
 
         "editor.codeActionsOnSave": [
