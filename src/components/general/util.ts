@@ -1,3 +1,7 @@
+// Copyright (C) 2022 Toitware ApS. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be
+// found in the LICENSE file.
+
 import { ESP_ROM_BAUD } from "@toit/esptool.js";
 import { DetectState } from "../../actions/serial";
 import * as Serial from "../../misc/serial";

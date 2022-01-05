@@ -1,3 +1,7 @@
+// Copyright (C) 2022 Toitware ApS. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be
+// found in the LICENSE file.
+
 export const UPDATE_CURRENT_ACTION = "UPDATE_CURRENT_ACTION";
 export const UPDATE_FLASHING_PROPERTIES = "UPDATE_FLASHING_PROPERTIES";
 export const UPDATE_INSTALL_TYPE = "UPDATE_INSTALL_TYPE";

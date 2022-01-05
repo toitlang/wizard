@@ -1,3 +1,7 @@
+// Copyright (C) 2022 Toitware ApS. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be
+// found in the LICENSE file.
+
 import { Button, Grid, Typography, WithStyles, withStyles } from "@material-ui/core";
 import Collapse from "@material-ui/core/Collapse";
 import { createStyles, Theme } from "@material-ui/core/styles";
