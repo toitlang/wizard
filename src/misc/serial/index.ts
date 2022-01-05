@@ -1,6 +1,7 @@
 // Copyright (C) 2022 Toitware ApS. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be
 // found in the LICENSE file.
+
 import { ChipFamily, EspLoader, ESP_ROM_BAUD, Logger } from "@toit/esptool.js";
 import { Completer } from "@toit/esptool.js/build/reader";
 import { isTransientError } from "@toit/esptool.js/build/util";
