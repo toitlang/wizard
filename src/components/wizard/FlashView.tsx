@@ -5,7 +5,7 @@ import { Beforeunload } from "react-beforeunload";
 import { RouteComponentProps, withRouter } from "react-router";
 import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
-import { black, pythonShade, white } from "../../assets/theme/theme";
+import { black, pythonShade } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
@@ -17,38 +17,6 @@ const styles = (theme: Theme) =>
     },
     textContent: {
       paddingTop: theme.spacing(5),
-    },
-    landingText: {
-      display: "inline-block",
-    },
-    boldText: {
-      fontWeight: 500,
-      display: "inline-block",
-    },
-    button: {
-      height: 36,
-      width: 100,
-      marginRight: theme.spacing(0.5),
-      marginLeft: theme.spacing(0.5),
-    },
-    bottomGrid: {
-      height: 68,
-      position: "fixed",
-      bottom: 16,
-      width: 440,
-    },
-    bottomInnerGrid: {
-      height: "100%",
-      width: "100%",
-      backgroundColor: white,
-      paddingLeft: theme.spacing(4),
-      paddingRight: theme.spacing(4),
-      boxShadow: "0 2px 4px rgb(1 14 40 / 5%)",
-      border: "1px solid #e5e8ed",
-      display: "flex",
-      alignItems: "center",
-      borderRadius: 4,
-      placeContent: "center",
     },
     scrollableWrapper: {
       height: "calc(100% - 8px)",
@@ -68,7 +36,6 @@ const styles = (theme: Theme) =>
       fontSize: 16,
     },
     percentage: {
-      //BOLD
       fontSize: "2rem",
       fontFamily: "Clash Display",
       fontWeight: 700,

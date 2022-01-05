@@ -10,10 +10,6 @@ const styles = (theme: Theme) =>
       maxWidth: 440,
       width: 440,
     },
-    errorGridSuggestion: {
-      paddingTop: theme.spacing(0.75),
-      paddingbottom: theme.spacing(0.75),
-    },
     errorHeading: {
       paddingTop: theme.spacing(2),
       fontSize: "2rem",
@@ -25,9 +21,6 @@ const styles = (theme: Theme) =>
       fontSize: "2rem",
       fontFamily: "Clash Display",
       fontWeight: 500,
-    },
-    textContent: {
-      paddingTop: theme.spacing(5),
     },
     scrollableWrapper: {
       height: "calc(100% - 8px)",

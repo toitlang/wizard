@@ -4,18 +4,11 @@ import { createStyles, Theme } from "@material-ui/core/styles";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import React from "react";
-import { white } from "../../assets/theme/theme";
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
-    },
-    nested: {
-      paddingLeft: theme.spacing(4),
-    },
-    listItem: {
-      color: white,
     },
     button: {
       height: 36,
