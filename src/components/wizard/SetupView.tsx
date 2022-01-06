@@ -133,7 +133,6 @@ class SetupView extends React.Component<SetupProps, SetupState> {
   }
 
   async loadFirmwareVersions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const res = await request("GET /repos/{owner}/{repo}/releases", {
       owner: "toitlang",
       repo: "jaguar",

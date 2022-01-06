@@ -11,13 +11,15 @@ import pako from "pako";
 import tar from "tar-stream";
 import streamifier from "streamifier";
 import { DetectState } from "../../actions/serial";
-import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
+import { FlashingProperties, WizardAction, WizardError, WizardErrorType } from "../../actions/wizard";
 import { black, pythonShade } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
 import { injectConfig } from "../../misc/config/inject";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
 import { Uint8Buffer } from "../../misc/serial/util";
+import { v4 as uuidv4 } from "uuid";
+import uuidParse from "uuid-parse";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -131,6 +133,7 @@ export class FlashLogger {
   }
 
   log(message?: unknown, ...optionalParams: unknown[]): void {
+    console.log(message, ...optionalParams);
     const msg = this.format(message, ...optionalParams);
     this.view.setState((state, props) => ({
       output: [...state.output, { type: "out", text: msg }],
@@ -144,6 +147,7 @@ export class FlashLogger {
   }
 
   error(message?: unknown, ...optionalParams: unknown[]): void {
+    console.error(message, ...optionalParams);
     const msg = this.format(message, ...optionalParams);
     this.view.setState((state, props) => ({
       output: [...state.output, { type: "err", text: msg }],
@@ -306,11 +310,6 @@ class FlashView extends React.Component<FlashProps, FlashState> {
       const res: JaguarPartitions = {};
       const fileBuffer: Uint8Buffer = new Uint8Buffer();
       extract.on("entry", function (header, stream, next) {
-        console.log("entry", header);
-        // header is the tar header
-        // stream is the content body (might be an empty stream)
-        // call next when you are done with this entry
-
         const partition = paths.get(header.name);
         if (partition !== undefined) {
           stream.on("data", (chunk: Uint8Array) => fileBuffer.copy(chunk));
@@ -360,40 +359,51 @@ class FlashView extends React.Component<FlashProps, FlashState> {
     // let partitions: Serial.Partition[];
     // TODO: Fetch partitions.
 
+    const partitions = await this.loadPartitions(properties.firmware_version);
+
+    const jagBinary = partitions.toit || new Uint8Array();
+    const uniqueID = new Uint8Array(uuidParse.parse(uuidv4()));
+    const config = new Uint8Array();
+    // jagBinary = injectConfig(jagBinary, config, uniqueID)
+    console.log("partitions", partitions);
+
     try {
       this.props.updateDetectState(undefined);
       await Serial.flash(
         port,
-        partitions.map<Serial.Partition>((p) => {
-          return {
-            name: p.getName(),
-            data: p.getData(),
-            offset: p.getOffset(),
-          };
-        }),
+        [
+          {
+            name: "bootloader",
+            data: partitions.bootloader || new Uint8Array(),
+            offset: 0x1000,
+          },
+          {
+            name: "partitions",
+            data: partitions.partitions || new Uint8Array(),
+            offset: 0x8000,
+          },
+          {
+            name: "jaguar",
+            data: jagBinary,
+            offset: 0x10000,
+          },
+        ],
         {
           progressCallback: (flashInput: Serial.FlashInput) =>
             this.setState({ flashState: flashInput.state, flashDetails: flashInput.details }),
           logger: logger,
-          erase: action === InstallType.PROVISION,
+          erase: false,
         }
       );
     } catch (e) {
       logger.error("failed to flash firmware", e);
       logger.log("Try again. If you are using a dev-board, try holding down the boot button while flashing");
-      analytics.track("Serial Flash Error", {
-        error_code: "" + e,
-        first_device: this.props.noDevices,
-      });
       this.props.updateCurrentAction({
         error: e,
         type: WizardErrorType.FLASH_ERR,
       });
       return false;
     }
-
-    const partitions = await this.loadPartitions(properties.firmware_version);
-    console.log("My partitions", partitions);
 
     this.props.updateCurrentAction(WizardAction.DONE);
     return true;
@@ -442,18 +452,18 @@ class FlashView extends React.Component<FlashProps, FlashState> {
                   {state.flashState === Serial.FlashState.STARTED
                     ? "Warming up"
                     : state.flashState === Serial.FlashState.CONNECTING
-                      ? "Connecting..."
-                      : state.flashState === Serial.FlashState.CONNECTED
-                        ? "Connected"
-                        : state.flashState === Serial.FlashState.ERASING
-                          ? "Preparing your device"
-                          : state.flashState === Serial.FlashState.ERASED
-                            ? "Device is ready"
-                            : state.flashState === Serial.FlashState.WRITING
-                              ? "Installing Jaguar"
-                              : state.flashState === Serial.FlashState.SUCCESS
-                                ? "Successfully installed Jaguar"
-                                : "An error occured"}
+                    ? "Connecting..."
+                    : state.flashState === Serial.FlashState.CONNECTED
+                    ? "Connected"
+                    : state.flashState === Serial.FlashState.ERASING
+                    ? "Preparing your device"
+                    : state.flashState === Serial.FlashState.ERASED
+                    ? "Device is ready"
+                    : state.flashState === Serial.FlashState.WRITING
+                    ? "Installing Jaguar"
+                    : state.flashState === Serial.FlashState.SUCCESS
+                    ? "Successfully installed Jaguar"
+                    : "An error occured"}
                 </Typography>
                 {/*
                 TODO: Add support for serial output here
