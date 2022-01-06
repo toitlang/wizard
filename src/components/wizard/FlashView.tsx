@@ -14,7 +14,6 @@ import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError, WizardErrorType } from "../../actions/wizard";
 import { black, pythonShade } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
-import { injectConfig } from "../../misc/config/inject";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
 import { Uint8Buffer } from "../../misc/serial/util";
