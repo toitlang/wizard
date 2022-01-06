@@ -20,6 +20,7 @@ import { closePort } from "../general/util";
 import { Uint8Buffer } from "../../misc/serial/util";
 import { v4 as uuidv4 } from "uuid";
 import uuidParse from "uuid-parse";
+import * as ubjson from "@shelacek/ubjson";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -308,14 +309,13 @@ class FlashView extends React.Component<FlashProps, FlashState> {
     return new Promise((resolve, reject) => {
       const extract = tar.extract();
       const res: JaguarPartitions = {};
-      const fileBuffer: Uint8Buffer = new Uint8Buffer();
       extract.on("entry", function (header, stream, next) {
         const partition = paths.get(header.name);
         if (partition !== undefined) {
+          const fileBuffer: Uint8Buffer = new Uint8Buffer();
           stream.on("data", (chunk: Uint8Array) => fileBuffer.copy(chunk));
           stream.on("end", () => {
             res[partition as keyof JaguarPartitions] = fileBuffer.view();
-            fileBuffer.reset();
             next(); // ready for next entry
           });
         } else {
@@ -361,11 +361,17 @@ class FlashView extends React.Component<FlashProps, FlashState> {
 
     const partitions = await this.loadPartitions(properties.firmware_version);
 
-    const jagBinary = partitions.toit || new Uint8Array();
+    let jagBinary = partitions.toit || new Uint8Array();
     const uniqueID = new Uint8Array(uuidParse.parse(uuidv4()));
-    const config = new Uint8Array();
-    // jagBinary = injectConfig(jagBinary, config, uniqueID)
-    console.log("partitions", partitions);
+    const config = ubjson.encode({
+      name: properties.name || "",
+      id: uuidv4(),
+      wifi: {
+        password: properties.password,
+        ssid: properties.ssid,
+      },
+    });
+    jagBinary = injectConfig(jagBinary, new Uint8Array(config), uniqueID);
 
     try {
       this.props.updateDetectState(undefined);
