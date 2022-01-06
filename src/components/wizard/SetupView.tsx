@@ -291,6 +291,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                         ssid: state.ssid,
                         password: state.password,
                         firmware_version: state.firmwareVersion,
+                        name: state.name,
                       })
                     }
                   >
