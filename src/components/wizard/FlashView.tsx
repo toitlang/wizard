@@ -14,6 +14,7 @@ import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
 import { black, pythonShade } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
+import { injectConfig } from "../../misc/config/inject";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
 import { Uint8Buffer } from "../../misc/serial/util";
@@ -441,18 +442,18 @@ class FlashView extends React.Component<FlashProps, FlashState> {
                   {state.flashState === Serial.FlashState.STARTED
                     ? "Warming up"
                     : state.flashState === Serial.FlashState.CONNECTING
-                    ? "Connecting..."
-                    : state.flashState === Serial.FlashState.CONNECTED
-                    ? "Connected"
-                    : state.flashState === Serial.FlashState.ERASING
-                    ? "Preparing your device"
-                    : state.flashState === Serial.FlashState.ERASED
-                    ? "Device is ready"
-                    : state.flashState === Serial.FlashState.WRITING
-                    ? "Installing Jaguar"
-                    : state.flashState === Serial.FlashState.SUCCESS
-                    ? "Successfully installed Jaguar"
-                    : "An error occured"}
+                      ? "Connecting..."
+                      : state.flashState === Serial.FlashState.CONNECTED
+                        ? "Connected"
+                        : state.flashState === Serial.FlashState.ERASING
+                          ? "Preparing your device"
+                          : state.flashState === Serial.FlashState.ERASED
+                            ? "Device is ready"
+                            : state.flashState === Serial.FlashState.WRITING
+                              ? "Installing Jaguar"
+                              : state.flashState === Serial.FlashState.SUCCESS
+                                ? "Successfully installed Jaguar"
+                                : "An error occured"}
                 </Typography>
                 {/*
                 TODO: Add support for serial output here

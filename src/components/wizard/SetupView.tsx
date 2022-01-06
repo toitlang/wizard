@@ -21,8 +21,8 @@ import {
   withStyles,
   WithStyles,
 } from "@material-ui/core";
-import { request } from "@octokit/request";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { request } from "@octokit/request";
 import React from "react";
 import { reactLocalStorage } from "reactjs-localstorage";
 import { DetectState } from "../../actions/serial";
@@ -109,6 +109,7 @@ interface SetupState {
   remember: boolean;
   loading: boolean;
   firmwareVersions: string[];
+  name?: string;
 }
 
 //Name constants used in localStorage
@@ -138,7 +139,6 @@ class SetupView extends React.Component<SetupProps, SetupState> {
       repo: "jaguar",
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const versions: string[] = res.data.map((v) => v.name || "").filter((version) => version.startsWith("v"));
     this.setState({
       loading: false,
@@ -218,31 +218,49 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                   </FormControl>
                   <AdvancedCollapsable>
                     <Grid container className={this.props.classes.advancedContent}>
-                      <InputLabel htmlFor="Version" className={this.props.classes.selectText}>
-                        Firmware version
-                      </InputLabel>
-                      <Select
-                        labelId="select-firmware-name"
-                        id="firmware-name-selector"
-                        value={state.firmwareVersion}
-                        fullWidth
-                      >
-                        {state.firmwareVersions?.map((version) => {
-                          return (
-                            <MenuItem
-                              key={version}
-                              value={version}
-                              onClick={() =>
-                                this.setState({
-                                  firmwareVersion: version,
-                                })
-                              }
-                            >
-                              {version}
-                            </MenuItem>
-                          );
-                        })}
-                      </Select>
+                      <FormControl fullWidth className={this.props.classes.inputRow}>
+                        <InputLabel>Device name</InputLabel>
+                        <Input
+                          className={this.props.classes.inputRow}
+                          type="text"
+                          value={state.name}
+                          onChange={(e) => this.setState(() => ({ name: e.target.value || "" }))}
+                          autoComplete="off"
+                          aria-describedby="helper-text"
+                        />
+                        <FormHelperText id="helper-text">
+                          Optional: If not set, your device will be assigned a random name
+                        </FormHelperText>
+                      </FormControl>
+                      {state.loading === false && (
+                        <>
+                          <InputLabel htmlFor="Version" className={this.props.classes.selectText}>
+                            Firmware version
+                          </InputLabel>
+                          <Select
+                            labelId="select-firmware-name"
+                            id="firmware-name-selector"
+                            value={state.firmwareVersion}
+                            fullWidth
+                          >
+                            {state.firmwareVersions?.map((version) => {
+                              return (
+                                <MenuItem
+                                  key={version}
+                                  value={version}
+                                  onClick={() =>
+                                    this.setState({
+                                      firmwareVersion: version,
+                                    })
+                                  }
+                                >
+                                  {version}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </>
+                      )}
                       <Grid container item xs={12} className={this.props.classes.inputRow}>
                         <Grid container item xs={8} alignContent="center">
                           <Typography>Remember settings locally?</Typography>
@@ -266,12 +284,13 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                     className={this.props.classes.button}
                     variant="contained"
                     size="large"
-                    disabled={state.ssid === ""}
+                    disabled={state.ssid === "" || state.loading}
                     onClick={() =>
                       this.beginFlash({
                         ssid: state.ssid,
                         password: state.password,
                         firmware_version: state.firmwareVersion,
+                        name: state.name,
                       })
                     }
                   >

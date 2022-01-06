@@ -17,6 +17,7 @@ export interface FlashingProperties {
   ssid: string;
   password: string;
   firmware_version: string;
+  name?: string;
 }
 
 export enum WizardErrorType {
