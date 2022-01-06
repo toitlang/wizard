@@ -7,12 +7,16 @@ import { UnregisterCallback } from "history";
 import React from "react";
 import { Beforeunload } from "react-beforeunload";
 import { RouteComponentProps, withRouter } from "react-router";
+import pako from "pako";
+import tar from "tar-stream";
+import streamifier from "streamifier";
 import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
 import { black, pythonShade } from "../../assets/theme/theme";
 import * as Serial from "../../misc/serial";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
+import { Uint8Buffer } from "../../misc/serial/util";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -91,6 +95,12 @@ interface FlashState {
   flashState: Serial.FlashState;
   flashDetails?: Serial.FlashDetails;
   flashPercentage: number;
+}
+
+interface JaguarPartitions {
+  bootloader?: Uint8Array;
+  partitions?: Uint8Array;
+  toit?: Uint8Array;
 }
 
 export type OutputItem = {
@@ -283,6 +293,56 @@ class FlashView extends React.Component<FlashProps, FlashState> {
     }
   }
 
+  extractPartitions(buffer: Uint8Array): Promise<JaguarPartitions> {
+    const paths = new Map<string, string>([
+      ["image/bootloader/bootloader.bin", "bootloader"],
+      ["image/partitions.bin", "partitions"],
+      ["image/toit.bin", "toit"],
+    ]);
+
+    return new Promise((resolve, reject) => {
+      const extract = tar.extract();
+      const res: JaguarPartitions = {};
+      const fileBuffer: Uint8Buffer = new Uint8Buffer();
+      extract.on("entry", function (header, stream, next) {
+        console.log("entry", header);
+        // header is the tar header
+        // stream is the content body (might be an empty stream)
+        // call next when you are done with this entry
+
+        const partition = paths.get(header.name);
+        if (partition !== undefined) {
+          stream.on("data", (chunk: Uint8Array) => fileBuffer.copy(chunk));
+          stream.on("end", () => {
+            res[partition as keyof JaguarPartitions] = fileBuffer.view();
+            fileBuffer.reset();
+            next(); // ready for next entry
+          });
+        } else {
+          stream.on("end", function () {
+            next(); // ready for next entry
+          });
+        }
+
+        stream.on("error", (err) => {
+          reject(err);
+        });
+
+        stream.resume(); // just auto drain the stream
+      });
+
+      extract.on("finish", () => resolve(res));
+      streamifier.createReadStream(buffer).pipe(extract);
+    });
+  }
+
+  async loadPartitions(version: string): Promise<JaguarPartitions> {
+    const resp = await fetch(`https://archive.toit.io/jaguar/${version}/image.tar.gz`);
+    const text = await resp.arrayBuffer();
+    const data = pako.inflate(new Uint8Array(text));
+    return await this.extractPartitions(data);
+  }
+
   async onFlash(properties: FlashingProperties): Promise<boolean> {
     if (!this.props.currentPort) {
       return false;
@@ -296,8 +356,43 @@ class FlashView extends React.Component<FlashProps, FlashState> {
     logger.reset();
 
     const detectState = this.props.detectState;
-    let partitions: Serial.Partition[];
+    // let partitions: Serial.Partition[];
     // TODO: Fetch partitions.
+
+    try {
+      this.props.updateDetectState(undefined);
+      await Serial.flash(
+        port,
+        partitions.map<Serial.Partition>((p) => {
+          return {
+            name: p.getName(),
+            data: p.getData(),
+            offset: p.getOffset(),
+          };
+        }),
+        {
+          progressCallback: (flashInput: Serial.FlashInput) =>
+            this.setState({ flashState: flashInput.state, flashDetails: flashInput.details }),
+          logger: logger,
+          erase: action === InstallType.PROVISION,
+        }
+      );
+    } catch (e) {
+      logger.error("failed to flash firmware", e);
+      logger.log("Try again. If you are using a dev-board, try holding down the boot button while flashing");
+      analytics.track("Serial Flash Error", {
+        error_code: "" + e,
+        first_device: this.props.noDevices,
+      });
+      this.props.updateCurrentAction({
+        error: e,
+        type: WizardErrorType.FLASH_ERR,
+      });
+      return false;
+    }
+
+    const partitions = await this.loadPartitions(properties.firmware_version);
+    console.log("My partitions", partitions);
 
     this.props.updateCurrentAction(WizardAction.DONE);
     return true;

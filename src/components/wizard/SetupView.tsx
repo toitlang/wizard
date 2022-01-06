@@ -140,7 +140,6 @@ class SetupView extends React.Component<SetupProps, SetupState> {
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
     const versions: string[] = res.data.map((v) => v.name || "").filter((version) => version.startsWith("v"));
-    console.log("result", versions);
     this.setState({
       loading: false,
       firmwareVersion: versions.length > 0 ? versions[0] : this.state.firmwareVersion,
