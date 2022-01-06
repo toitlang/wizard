@@ -25,11 +25,18 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { request } from "@octokit/request";
 import React from "react";
 import { reactLocalStorage } from "reactjs-localstorage";
+import { adjectives, colors, Config, uniqueNamesGenerator } from "unique-names-generator";
 import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError } from "../../actions/wizard";
 import { white } from "../../assets/theme/theme";
 import ScrollableContainer from "../general/ScrollableContainer";
 import AdvancedCollapsable from "../serial/AdvancedCollapsable";
+
+const customConfig: Config = {
+  dictionaries: [adjectives, colors],
+  separator: "-",
+  length: 2,
+};
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -126,6 +133,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
     firmwareVersion: "latest",
     firmwareVersions: [],
     loading: true,
+    name: uniqueNamesGenerator(customConfig),
   };
 
   constructor(props: SetupProps) {

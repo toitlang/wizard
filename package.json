@@ -51,6 +51,7 @@
     "rive-react": "^0.0.18",
     "rxjs": "^6.6.3",
     "typescript": "3.8.3",
+    "unique-names-generator": "^4.6.0",
     "utf8": "^3.0.0",
     "uuid-parse": "^1.1.0"
   },
