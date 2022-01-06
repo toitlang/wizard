@@ -141,14 +141,12 @@ class SetupView extends React.Component<SetupProps, SetupState> {
   }
 
   async loadFirmwareVersions() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
     const res = await request("GET /repos/{owner}/{repo}/releases", {
       owner: "toitlang",
       repo: "jaguar",
     });
 
     const versions: string[] = res.data.map((v) => v.name || "").filter((version) => version.startsWith("v"));
-    console.log("result", versions);
     this.setState({
       loading: false,
       firmwareVersion: versions.length > 0 ? versions[0] : this.state.firmwareVersion,
@@ -166,6 +164,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
       ssid: flashingProperties.ssid,
       password: flashingProperties.password,
       firmware_version: flashingProperties.firmware_version,
+      name: flashingProperties.name,
     });
     if (this.state.remember) {
       reactLocalStorage.set(toitWifiSSID, this.state.ssid);

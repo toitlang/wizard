@@ -58,8 +58,7 @@ interface PageComponent {
   routepath: string;
   linkpath: string;
   exact: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  render: (props: RouteComponentProps<any>) => React.ReactNode;
+  render: (props: RouteComponentProps) => React.ReactNode;
   icon?: JSX.Element;
   showInMenu?: boolean;
   selected?: string[];
