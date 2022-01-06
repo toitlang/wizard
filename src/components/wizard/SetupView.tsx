@@ -14,12 +14,14 @@ import {
   Input,
   InputAdornment,
   InputLabel,
+  MenuItem,
   Select,
   Theme,
   Typography,
   withStyles,
   WithStyles,
 } from "@material-ui/core";
+import { request } from "@octokit/request";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import React from "react";
 import { reactLocalStorage } from "reactjs-localstorage";
@@ -102,12 +104,11 @@ interface SetupProps extends WithStyles<typeof styles> {
 interface SetupState {
   ssid: string;
   password: string;
-  compatibleModelsForSelectedFirmware: string[];
-  firmwareName: string;
-  firmwareModel: string;
-  model: string;
+  firmwareVersion: string;
   showPassword: boolean;
   remember: boolean;
+  loading: boolean;
+  firmwareVersions: string[];
 }
 
 //Name constants used in localStorage
@@ -119,17 +120,37 @@ class SetupView extends React.Component<SetupProps, SetupState> {
   initialState = {
     ssid: reactLocalStorage.get(toitWifiSSID, "").toString() || "",
     password: reactLocalStorage.get(toitWifiPassword, "").toString() || "",
-    firmwareModel: "esp32-4mb",
     showPassword: false,
     remember: reactLocalStorage.get("toit_remember", false),
+    firmwareVersion: "latest",
+    firmwareVersions: [],
+    loading: true,
   };
 
   constructor(props: SetupProps) {
     super(props);
   }
 
+  async loadFirmwareVersions() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
+    const res = await request("GET /repos/{owner}/{repo}/releases", {
+      owner: "toitlang",
+      repo: "jaguar",
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment
+    const versions: string[] = res.data.map((v) => v.name || "").filter((version) => version.startsWith("v"));
+    console.log("result", versions);
+    this.setState({
+      loading: false,
+      firmwareVersion: versions.length > 0 ? versions[0] : this.state.firmwareVersion,
+      firmwareVersions: versions,
+    });
+  }
+
   componentDidMount() {
     this.setState(this.initialState);
+    void this.loadFirmwareVersions();
   }
 
   beginFlash(flashingProperties: FlashingProperties) {
@@ -137,7 +158,6 @@ class SetupView extends React.Component<SetupProps, SetupState> {
       ssid: flashingProperties.ssid,
       password: flashingProperties.password,
       firmware_version: flashingProperties.firmware_version,
-      model: flashingProperties.model,
     });
     if (this.state.remember) {
       reactLocalStorage.set(toitWifiSSID, this.state.ssid);
@@ -205,9 +225,25 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                       <Select
                         labelId="select-firmware-name"
                         id="firmware-name-selector"
-                        value={state.firmwareName}
+                        value={state.firmwareVersion}
                         fullWidth
-                      ></Select>
+                      >
+                        {state.firmwareVersions?.map((version) => {
+                          return (
+                            <MenuItem
+                              key={version}
+                              value={version}
+                              onClick={() =>
+                                this.setState({
+                                  firmwareVersion: version,
+                                })
+                              }
+                            >
+                              {version}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
                       <Grid container item xs={12} className={this.props.classes.inputRow}>
                         <Grid container item xs={8} alignContent="center">
                           <Typography>Remember settings locally?</Typography>
@@ -236,8 +272,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
                       this.beginFlash({
                         ssid: state.ssid,
                         password: state.password,
-                        firmware_version: state.firmwareName,
-                        model: state.firmwareModel,
+                        firmware_version: state.firmwareVersion,
                       })
                     }
                   >
