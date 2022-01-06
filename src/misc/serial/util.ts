@@ -70,17 +70,17 @@ export class Uint8Buffer {
     }
     let littleEndian = true;
     for (let i = 0; i < format.length; i++) {
-      if (format[i] == "<") {
+      if (format[i] === "<") {
         littleEndian = true;
-      } else if (format[i] == ">") {
+      } else if (format[i] === ">") {
         littleEndian = false;
-      } else if (format[i] == "B") {
+      } else if (format[i] === "B") {
         this.pushBytes(data[pointer], 1, littleEndian);
         pointer++;
-      } else if (format[i] == "H") {
+      } else if (format[i] === "H") {
         this.pushBytes(data[pointer], 2, littleEndian);
         pointer++;
-      } else if (format[i] == "I") {
+      } else if (format[i] === "I") {
         this.pushBytes(data[pointer], 4, littleEndian);
         pointer++;
       } else {
@@ -148,9 +148,9 @@ export class Uint8BufferSlipEncode extends Uint8Buffer {
    * Replaces 0xdb with 0xdb 0xdd and 0xc0 with 0xdb 0xdc
    */
   private slipEncodeByte(v: number) {
-    if (v == 0xdb) {
+    if (v === 0xdb) {
       super.push(0xdb, 0xdd);
-    } else if (v == 0xc0) {
+    } else if (v === 0xc0) {
       super.push(0xdb, 0xdc);
     } else {
       super.push(v);
