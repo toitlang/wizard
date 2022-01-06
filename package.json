@@ -11,6 +11,7 @@
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.0.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
+    "@octokit/request": "^5.6.2",
     "@toit/esptool.js": "0.12.3",
     "@types/classnames": "^2.2.8",
     "@types/color": "^3.0.1",
@@ -57,7 +58,6 @@
     "start": "react-app-rewired start",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --max-warnings=0",
     "build": "CI=false react-app-rewired build",
-    "watch": "export BUILD_PATH=$PWD/build; node ./scripts/watch.js",
     "eject": "react-scripts eject",
     "test": "tsc && react-app-rewired test",
     "test:jenkins": "CI=true tsc && react-app-rewired test --reporters=jest-junit --coverage --coverageDirectory=coverage"
