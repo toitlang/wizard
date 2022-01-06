@@ -19,7 +19,7 @@ const IMAGE_DATA_MAGIC_1 = 0x7017da7a;
 const IMAGE_DATA_MAGIC_2 = 0xc09f19;
 
 function getImageDataPosition(bytes: Uint8Array): [number, number] {
-  const asWords = Uint32Array.from(bytes);
+  const asWords = new Uint32Array(bytes.buffer);
   const WORD_SIZE = 4;
   for (let i = 0; i < asWords.length; i++) {
     const word_1 = asWords[i];

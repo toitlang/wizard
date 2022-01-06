@@ -363,15 +363,15 @@ class FlashView extends React.Component<FlashProps, FlashState> {
 
     let jagBinary = partitions.toit || new Uint8Array();
     const uniqueID = new Uint8Array(uuidParse.parse(uuidv4()));
-    const config = ubjson.encode({
+    const config = {
       name: properties.name || "",
       id: uuidv4(),
       wifi: {
         password: properties.password,
         ssid: properties.ssid,
       },
-    });
-    jagBinary = injectConfig(jagBinary, new Uint8Array(config), uniqueID);
+    };
+    jagBinary = injectConfig(jagBinary, new Uint8Array(ubjson.encode(config)), uniqueID);
 
     try {
       this.props.updateDetectState(undefined);

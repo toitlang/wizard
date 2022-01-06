@@ -156,6 +156,7 @@ class SetupView extends React.Component<SetupProps, SetupState> {
       ssid: flashingProperties.ssid,
       password: flashingProperties.password,
       firmware_version: flashingProperties.firmware_version,
+      name: flashingProperties.name,
     });
     if (this.state.remember) {
       reactLocalStorage.set(toitWifiSSID, this.state.ssid);
