@@ -26,3 +26,9 @@ jobs:
           files: junit.xml
       - name: Build
         run: yarn run build
+      - name: Deploy 🚀
+        if: github.event_name == 'release'
+        uses: JamesIves/github-pages-deploy-action@4.2.0
+        with:
+          branch: gh-pages
+          folder: build
