@@ -20,6 +20,7 @@ import { Uint8Buffer } from "../../misc/serial/util";
 import { v4 as uuidv4 } from "uuid";
 import uuidParse from "uuid-parse";
 import * as ubjson from "@shelacek/ubjson";
+import { injectConfig } from "../../misc/config/inject";
 
 const styles = (theme: Theme) =>
   createStyles({

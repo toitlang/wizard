@@ -24,8 +24,7 @@ module.exports = {
   rules: {
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": "off",
     "@typescript-eslint/restrict-plus-operands": "off", // KEEP
     "@typescript-eslint/require-await": "off", // KEEP
     "@typescript-eslint/no-unused-vars": "off", // KEEP
@@ -34,5 +33,6 @@ module.exports = {
     "@typescript-eslint/unbound-method": "off", // Reconsider
     "@typescript-eslint/no-var-requires": "off", // KEEP
     "@typescript-eslint/await-thenable": "off", // KEEP
+
   },
 };
