@@ -25,7 +25,12 @@ jobs:
       #   with:
       #     files: junit.xml
       - name: Build
-        run: yarn run build
+        run: PUBLIC_URL=/wizard yarn run build
+      - name: Upload build
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
       - name: Deploy 🚀
         if: github.event_name == 'release'
         uses: JamesIves/github-pages-deploy-action@4.2.0
