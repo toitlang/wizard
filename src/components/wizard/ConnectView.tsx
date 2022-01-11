@@ -265,7 +265,13 @@ class ConnectView extends React.Component<ConnectProps, ConnectState> {
                 {this.state.error === undefined ? (
                   <GetStartedView
                     title="1. Connect the ESP32"
-                    illustration={<RiveAnimation width={300} height={220} path={process.env.PUBLIC_URL + "/animations/connect_device.riv"} />}
+                    illustration={
+                      <RiveAnimation
+                        width={300}
+                        height={220}
+                        path={process.env.PUBLIC_URL + "/animations/connect_device.riv"}
+                      />
+                    }
                   >
                     <Typography className={this.props.classes.landingText}>
                       Install the USB serial driver from{" "}
