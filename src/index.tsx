@@ -13,7 +13,7 @@ import configureStore from "./store";
 
 render(
   <Provider store={configureStore()}>
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <App />
     </Router>
   </Provider>,

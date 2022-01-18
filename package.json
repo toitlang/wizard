@@ -71,7 +71,7 @@
     "build": "CI=false react-app-rewired build",
     "eject": "react-scripts eject",
     "test": "tsc && react-app-rewired test",
-    "test:jenkins": "CI=true tsc && react-app-rewired test --reporters=jest-junit --coverage --coverageDirectory=coverage"
+    "test:ci": "CI=true tsc && react-app-rewired test --reporters=jest-junit --coverage --coverageDirectory=coverage"
   },
   "eslintConfig": {
     "extends": "react-app"
