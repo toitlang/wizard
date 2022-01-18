@@ -7,7 +7,7 @@ export const UPDATE_DETECT_STATE = "UPDATE_DETECT_STATE";
 export const UPDATE_CURRENT_PORT_OPEN = "UPDATE_CURRENT_PORT_OPEN";
 export const UPDATE_WIZARD_SETUP_STATE = "UPDATE_WIZARD_SETUP_STATE";
 
-type UpdateCurrentPort = {
+export type UpdateCurrentPort = {
   type: typeof UPDATE_CURRENT_PORT;
   payload: { currentPort?: SerialPort };
 };
