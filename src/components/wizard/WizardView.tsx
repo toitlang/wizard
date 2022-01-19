@@ -9,13 +9,13 @@ import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError, WizardErrorType } from "../../actions/wizard";
 import { tigerShade } from "../../assets/theme/theme";
 import Connect from "../../containers/wizard/Connect";
+import Done from "../../containers/wizard/Done";
 import Flash from "../../containers/wizard/Flash";
 import Setup from "../../containers/wizard/Setup";
 import * as Serial from "../../misc/serial";
 import { initialWizardState } from "../../reducers/wizard";
 import HeaderBodyView, { Body, Header } from "../general/HeaderBodyView";
 import { closePort } from "../general/util";
-import DoneView from "./DoneView";
 import ErrorButtonView from "./ErrorButtonView";
 import { ReactComponent as ArrowIcon } from "./images/arrow.svg";
 import { ReactComponent as ConnectFocusIcon } from "./images/connect_focus.svg";
@@ -104,7 +104,7 @@ class WizardView extends React.Component<WizardProps> {
       case WizardAction.FLASH:
         return <Flash />;
       case WizardAction.DONE:
-        return <DoneView />;
+        return <Done />;
       case undefined:
         return undefined;
       default:
@@ -181,17 +181,6 @@ class WizardView extends React.Component<WizardProps> {
     navigator.serial.ondisconnect = async () => {
       await this.onDisconnect();
     };
-  }
-
-  async componentDidUpdate() {
-    if (this.props.currentAction === WizardAction.DONE && this.props.currentPort) {
-      try {
-        await closePort(this.props);
-      } catch (e) {
-        console.log("Failed to close", e);
-      }
-      this.props.updateCurrentPort(undefined);
-    }
   }
 
   async componentWillUnmount() {

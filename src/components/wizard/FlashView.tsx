@@ -3,24 +3,24 @@
 // found in the LICENSE file.
 
 import { Box, createStyles, Grid, LinearProgress, Theme, Typography, withStyles, WithStyles } from "@material-ui/core";
+import * as ubjson from "@shelacek/ubjson";
 import { UnregisterCallback } from "history";
+import pako from "pako";
 import React from "react";
 import { Beforeunload } from "react-beforeunload";
 import { RouteComponentProps, withRouter } from "react-router";
-import pako from "pako";
-import tar from "tar-stream";
 import streamifier from "streamifier";
+import tar from "tar-stream";
+import { v4 as uuidv4 } from "uuid";
+import uuidParse from "uuid-parse";
 import { DetectState } from "../../actions/serial";
 import { FlashingProperties, WizardAction, WizardError, WizardErrorType } from "../../actions/wizard";
 import { black, pythonShade } from "../../assets/theme/theme";
+import { injectConfig } from "../../misc/config/inject";
 import * as Serial from "../../misc/serial";
+import { Uint8Buffer } from "../../misc/serial/util";
 import ScrollableContainer from "../general/ScrollableContainer";
 import { closePort } from "../general/util";
-import { Uint8Buffer } from "../../misc/serial/util";
-import { v4 as uuidv4 } from "uuid";
-import uuidParse from "uuid-parse";
-import * as ubjson from "@shelacek/ubjson";
-import { injectConfig } from "../../misc/config/inject";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -99,6 +99,7 @@ interface FlashState {
   flashState: Serial.FlashState;
   flashDetails?: Serial.FlashDetails;
   flashPercentage: number;
+  monitorRunning?: boolean;
 }
 
 interface JaguarPartitions {
