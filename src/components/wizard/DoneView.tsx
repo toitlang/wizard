@@ -84,7 +84,7 @@ const styles = (theme: Theme) =>
 interface DoneProps extends WithStyles<typeof styles> {
   currentPort?: SerialPort;
   currentPortOpen?: boolean;
-  updateCurrentPort: (state: SerialPort | undefined) => void;
+  updateCurrentPort: (state?: SerialPort) => void;
   updateCurrentPortOpen: (state: boolean) => void;
 }
 
@@ -262,7 +262,7 @@ class DoneView extends React.Component<DoneProps, DoneState> {
                   size="large"
                   onClick={() => this.toggleMonitor()}
                 >
-                  Toggle monitor
+                  {state.monitorRunning ? "Stop monitor" : "Start monitor"}
                 </Button>
               </Grid>
             </Grid>
