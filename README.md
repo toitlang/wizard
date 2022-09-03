@@ -1,4 +1,4 @@
-# [wizard.toitlang.org](https://wizard.toitlang.org)
+# [wizard.toitlang.org](https://toitlang.github.io/wizard/)
 
 This is the wizard for setting up your ESP32 with Jaguar which uses the open source programming language **Toit**. The wizard uses the [Toit esptool](https://www.npmjs.com/package/@toit/esptool.js).
 
